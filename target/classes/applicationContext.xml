@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Repository -->
+    <bean id="ledgerRepository" class="com.mitchell.tinyledger.repo.InMemoryLedgerRepository"/>
+
+    <!-- Transaction services -->
+    <bean id="depositService" class="com.mitchell.tinyledger.service.DepositServer">
+        <constructor-arg ref="ledgerRepository"/>
+    </bean>
+    <bean id="withdrawalService" class="com.mitchell.tinyledger.service.WithdrawalService">
+        <constructor-arg ref="ledgerRepository"/>
+    </bean>
+    <bean id="paymentService" class="com.mitchell.tinyledger.service.PaymentService">
+        <constructor-arg ref="ledgerRepository"/>
+    </bean>
+    <bean id="feeService" class="com.mitchell.tinyledger.service.FeeService">
+        <constructor-arg ref="ledgerRepository"/>
+    </bean>
+    <bean id="adjustmentService" class="com.mitchell.tinyledger.service.AdjustmentService">
+        <constructor-arg ref="ledgerRepository"/>
+    </bean>
+
+    <!-- Transaction service factory -->
+    <bean id="transactionFactoryService" class="com.mitchell.tinyledger.service.TransactionFactoryService">
+        <constructor-arg ref="depositService"/>
+        <constructor-arg ref="withdrawalService"/>
+        <constructor-arg ref="paymentService"/>
+        <constructor-arg ref="feeService"/>
+        <constructor-arg ref="adjustmentService"/>
+    </bean>
+
+    <!-- Transfer service -->
+    <bean id="transferService" class="com.mitchell.tinyledger.service.TransferService">
+        <constructor-arg ref="ledgerRepository"/>
+    </bean>
+
+    <!-- Account service -->
+    <bean id="accountService" class="com.mitchell.tinyledger.service.AccountService">
+        <constructor-arg ref="ledgerRepository"/>
+    </bean>
+
+    <!-- Handlers -->
+    <bean id="createAccountHandler" class="com.mitchell.tinyledger.http.handlers.CreateAccountHandler">
+        <constructor-arg ref="accountService"/>
+    </bean>
+    <bean id="getBalanceHandler" class="com.mitchell.tinyledger.http.handlers.GetBalanceHandler">
+        <constructor-arg ref="accountService"/>
+    </bean>
+    <bean id="getTransactionsHandler" class="com.mitchell.tinyledger.http.handlers.GetTransactionsHandler">
+        <constructor-arg ref="accountService"/>
+    </bean>
+    <bean id="postTransactionHandler" class="com.mitchell.tinyledger.http.handlers.PostTransactionHandler">
+        <constructor-arg ref="transactionFactoryService"/>
+    </bean>
+    <bean id="transferHandler" class="com.mitchell.tinyledger.http.handlers.TransferHandler">
+        <constructor-arg ref="transferService"/>
+    </bean>
+
+    <!-- Server bootstrap -->
+    <bean id="serverBootstrap"
+          class="com.mitchell.tinyledger.bootstrap.ServerBootstrap"
+          init-method="start"
+          destroy-method="stop">
+        <property name="port" value="8080"/>
+    </bean>
+
+
+    <bean id="datasetLoader"
+          class="com.mitchell.tinyledger.dataset.DatasetLoader"
+          init-method="seed">
+        <constructor-arg ref="accountService"/>
+        <constructor-arg ref="transactionFactoryService"/>
+    </bean>
+
+</beans>
