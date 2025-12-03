@@ -21,7 +21,12 @@ public class AccountService implements IAccountService{
     @Override
     public Account createAccount(String name, Currency currency, BigDecimal initialBalance) {
         UUID id = UUID.randomUUID();
-        Account acc = new Account(id, name, currency, initialBalance==null ? BigDecimal.ZERO:initialBalance);
+        Account acc = new Account(
+                id,
+                name,
+                currency == null ? Currency.USD : currency,
+                initialBalance == null ? BigDecimal.ZERO:initialBalance
+        );
         repo.upsertAccount(acc);
         locks.putIfAbsent(id, new ReentrantLock());
         return acc;

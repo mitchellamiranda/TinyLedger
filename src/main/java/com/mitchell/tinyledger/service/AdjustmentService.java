@@ -1,15 +1,9 @@
 package com.mitchell.tinyledger.service;
 
-import com.mitchell.tinyledger.model.Account;
-import com.mitchell.tinyledger.model.Currency;
-import com.mitchell.tinyledger.model.MovementType;
-import com.mitchell.tinyledger.model.Transaction;
 import com.mitchell.tinyledger.repo.ILedgerRepository;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;

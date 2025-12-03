@@ -1,8 +1,5 @@
 package com.mitchell.tinyledger.service;
 
-import com.mitchell.tinyledger.model.Currency;
-import com.mitchell.tinyledger.model.MovementType;
-import com.mitchell.tinyledger.model.Transaction;
 import com.mitchell.tinyledger.repo.ILedgerRepository;
 
 import java.math.BigDecimal;
