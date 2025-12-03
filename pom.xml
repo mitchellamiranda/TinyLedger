@@ -17,6 +17,7 @@
     <jackson.version>2.17.1</jackson.version>
     <junit.version>4.13.2</junit.version>
     <mockito.version>5.10.0</mockito.version>
+    <junit4-dataprovider.version>2.6</junit4-dataprovider.version>
   </properties>
 
   <dependencies>
@@ -57,6 +58,12 @@
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.tngtech.junit.dataprovider</groupId>
+      <artifactId>junit4-dataprovider</artifactId>
+      <version>${junit4-dataprovider.version}</version>
+      <scope>test</scope>
+    </dependency>
 
     <!-- (Optional) Simple logging -->
     <dependency>
@@ -79,7 +86,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.2.5</version>
       </plugin>
-
+ 
       <!-- Fat-jar for `java -jar` -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
