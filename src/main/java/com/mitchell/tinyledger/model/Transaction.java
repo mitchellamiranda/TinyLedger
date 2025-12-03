@@ -12,8 +12,14 @@ public final class Transaction {
     private final Currency currency;
     private final Instant occurredAt;
 
-    public Transaction(UUID id, UUID accountId, MovementType type, BigDecimal amount,
-                       Currency currency, Instant occurredAt) {
+    public Transaction(
+            UUID id,
+            UUID accountId,
+            MovementType type,
+            BigDecimal amount,
+            Currency currency,
+            Instant occurredAt
+    ) {
         this.id = id;
         this.accountId = accountId;
         this.type = type;

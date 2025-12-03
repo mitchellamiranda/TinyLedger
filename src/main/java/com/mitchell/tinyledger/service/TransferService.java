@@ -22,8 +22,13 @@ public class TransferService implements ITransferService{
 
     @Override
     public Transaction transfer(UUID sourceAccountId, UUID destinationAccountId, BigDecimal amount, Currency currency) {
-        if (sourceAccountId.equals(destinationAccountId)) throw new IllegalArgumentException("Source and destination must differ");
-        if (amount == null || amount.signum() <= 0) throw new IllegalArgumentException("Amount must be > 0");
+        if (sourceAccountId.equals(destinationAccountId)) {
+            throw new IllegalArgumentException("Source and destination must differ");
+        }
+
+        if (amount == null || amount.signum() <= 0) {
+            throw new IllegalArgumentException("Amount must be > 0");
+        }
 
         List<UUID> ids = Arrays.asList(sourceAccountId, destinationAccountId);
         ids.sort(Comparator.naturalOrder()); // Prevent deadlocks
@@ -35,9 +40,14 @@ public class TransferService implements ITransferService{
         try {
             Account src = repo.findAccount(sourceAccountId).orElseThrow(() -> new NoSuchElementException("Source not found"));
             Account dst = repo.findAccount(destinationAccountId).orElseThrow(() -> new NoSuchElementException("Destination not found"));
-            if (currency != src.getCurrency() || currency != dst.getCurrency())
+
+            if (currency != src.getCurrency() || currency != dst.getCurrency()) {
                 throw new IllegalArgumentException("Currency mismatch");
-            if (src.getBalance().compareTo(amount) < 0) throw new IllegalStateException("Insufficient funds");
+            }
+
+            if (src.getBalance().compareTo(amount) < 0) {
+                throw new IllegalStateException("Insufficient funds");
+            }
 
             Account srcUpdated = src.withBalance(src.getBalance().subtract(amount));
             Account dstUpdated = dst.withBalance(dst.getBalance().add(amount));

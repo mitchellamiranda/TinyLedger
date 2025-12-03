@@ -4,7 +4,6 @@ import com.mitchell.tinyledger.dto.MoneyMovementRequest;
 import com.mitchell.tinyledger.http.JsonUtil;
 import com.mitchell.tinyledger.model.MovementType;
 import com.mitchell.tinyledger.model.Transaction;
-import com.mitchell.tinyledger.service.ILedgerService;
 import com.mitchell.tinyledger.service.ITransactionFactoryService;
 import com.mitchell.tinyledger.service.ITransactionService;
 import com.sun.net.httpserver.HttpExchange;
@@ -28,6 +27,7 @@ public class PostTransactionHandler implements HttpHandler {
             JsonUtil.sendError(ex, 405, "Use POST");
             return;
         }
+
         String query = ex.getRequestURI().getQuery();
         if (query == null || !query.startsWith("accountId=")) {
             JsonUtil.sendError(ex, 400, "Provide ?accountId=UUID");
@@ -35,8 +35,11 @@ public class PostTransactionHandler implements HttpHandler {
         }
         UUID accountId = UUID.fromString(query.substring("accountId=".length()));
         MoneyMovementRequest req;
-        try { req = JsonUtil.readBody(ex, MoneyMovementRequest.class); }
-        catch (Exception e) { JsonUtil.sendError(ex, 400, "Invalid JSON: " + e.getMessage()); return; }
+        try {
+            req = JsonUtil.readBody(ex, MoneyMovementRequest.class);
+        } catch (Exception e) {
+            JsonUtil.sendError(ex, 400, "Invalid JSON: " + e.getMessage()); return;
+        }
 
         MovementType type = req.type;
         Optional<ITransactionService> serviceOpt = factory.getService(type);
@@ -44,6 +47,7 @@ public class PostTransactionHandler implements HttpHandler {
             JsonUtil.sendError(ex, 400, "Unsupported transaction type: " + type);
             return;
         }
+
         try {
             ITransactionService service = serviceOpt.get();
             Transaction tx = service.record(accountId, type, req.amount, req.currency);

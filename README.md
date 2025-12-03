@@ -22,5 +22,5 @@ It runs a lightweight HTTP server (JDK `HttpServer`) and supports:
 
 ```bash
 mvn -q -DskipTests package
-java -jar target/TinyLedger-1.0.0-shaded.jar
+java -jar target/TinyLedger-1.0.0.jar
 # Server listens on http://localhost:8080

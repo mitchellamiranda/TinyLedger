@@ -21,11 +21,13 @@ public class GetTransactionsHandler implements HttpHandler {
             JsonUtil.sendError(ex, 405, "Use GET");
             return;
         }
+
         String query = ex.getRequestURI().getQuery();
         if (query == null || !query.startsWith("id=")) {
             JsonUtil.sendError(ex, 400, "Provide ?id=UUID");
             return;
         }
+
         UUID id = UUID.fromString(query.substring(3));
         List<Transaction> txs = service.history(id);
         JsonUtil.sendJson(ex, 200, Map.of(

@@ -3,7 +3,6 @@ package com.mitchell.tinyledger.http.handlers;
 
 import com.mitchell.tinyledger.http.JsonUtil;
 import com.mitchell.tinyledger.service.IAccountService;
-import com.mitchell.tinyledger.service.ILedgerService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -25,11 +24,13 @@ public class GetBalanceHandler implements HttpHandler {
             JsonUtil.sendError(ex, 405, "Use GET");
             return;
         }
+
         String query = ex.getRequestURI().getQuery();
         if (query==null || !query.startsWith("id=")) {
             JsonUtil.sendError(ex, 400, "Provide ?id=UUID");
             return;
         }
+
         UUID id = UUID.fromString(query.substring(3));
         BigDecimal balance = service.getBalance(id);
         JsonUtil.sendJson(ex, 200, Map.of("accountId", id.toString(), "balance", balance));

@@ -1,7 +1,3 @@
-Here’s your **enhanced TinyLedger API Reference** with support for all transaction types—including payments, transfers, fees, and adjustments—plus example `curl` commands for each. This version is ready for your updated backend!
-
-***
-
 # TinyLedger API Reference
 
 ## **Introduction**

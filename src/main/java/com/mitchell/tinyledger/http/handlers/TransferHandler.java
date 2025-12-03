@@ -23,6 +23,7 @@ public class TransferHandler implements HttpHandler {
             JsonUtil.sendError(ex, 405, "Use POST");
             return;
         }
+
         TransferRequest req;
         try {
             req = JsonUtil.readBody(ex, TransferRequest.class);
@@ -30,6 +31,7 @@ public class TransferHandler implements HttpHandler {
             JsonUtil.sendError(ex, 400, "Invalid JSON: " + e.getMessage());
             return;
         }
+
         try {
             Transaction tx = service.transfer(req.sourceAccountId, req.destinationAccountId, req.amount, req.currency);
             JsonUtil.sendJson(ex, 201, Map.of(

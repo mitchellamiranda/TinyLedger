@@ -4,7 +4,6 @@ import com.mitchell.tinyledger.http.JsonUtil;
 import com.mitchell.tinyledger.model.Account;
 import com.mitchell.tinyledger.model.Currency;
 import com.mitchell.tinyledger.service.IAccountService;
-import com.mitchell.tinyledger.service.ILedgerService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -26,7 +25,8 @@ public class CreateAccountHandler implements HttpHandler {
         String currencyStr = (String) body.getOrDefault("currency", "EUR");
         Currency currency = Currency.valueOf(currencyStr);
         BigDecimal initial = body.containsKey("initialBalance")
-                ? new BigDecimal(String.valueOf(body.get("initialBalance"))) : BigDecimal.ZERO;
+                ? new BigDecimal(String.valueOf(body.get("initialBalance")))
+                : BigDecimal.ZERO;
 
         Account acc = service.createAccount(name, currency, initial);
         JsonUtil.sendJson(ex, 201, Map.of(
